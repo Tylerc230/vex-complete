@@ -2,8 +2,7 @@ import os
 import re
 import sys
 import json
-import vexcore
-
+from .vex-core.completion import Completion
 from .base import Base
 
 from deoplete.util import charpos2bytepos
