@@ -2,11 +2,15 @@ import os
 import re
 import sys
 import json
-from .vex-core.completion import Completion
 from .base import Base
 
 from deoplete.util import charpos2bytepos
 from deoplete.util import error
+
+
+path = os.path.dirname(__file__)
+sys.path.append(path)
+from  vexcore.completion import Completion
 
 class Source(Base):
     def __init__(self, vim):
@@ -37,25 +41,8 @@ class Source(Base):
             charpos2bytepos('utf-8', context['input'], column) - 1
 
         completion = Completion(source_file=filename)
-        result = completion.completion_at_offset(offse)
+        result = completion.completion_at_offset(offset)
         return result
-
-        # source = '\n'.join(buf)
-        # tmp_path = self.temp_file_directory + filename
-        # tmp_file = open(tmp_path, 'w+')
-        # tmp_file.write(source)
-        # tmp_file.close()
-
-        # request = urllib2.Request("http://localhost:8081/complete")
-        # request.add_header("X-Path", tmp_path)
-        # request.add_header("X-Offset", offset - 1)
-        # request.add_header("X-File", filename)
-        # try:
-            # response = urllib2.urlopen(request).read().decode('utf-8')
-            # return self.identifiers_from_result(json.loads(response))
-        # except:
-            # return []
-
 
     def identifiers_from_result(self, result):
         out = []
