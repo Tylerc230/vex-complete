@@ -19,7 +19,7 @@ class Completion():
                 }
         if not self.text == None:
             req['key.sourcetext'] = self.text
-        elif not self.file == None:
+        elif not self.source_file == None:
             req['key.sourcefile'] = self.source_file
         else:
             raise RuntimeError("Must do completion on file or text")
