@@ -35,12 +35,12 @@ class Source(Base):
         line = self.vim.current.window.cursor[0]
         column = self.vim.current.window.cursor[1]
 
-        filename = self.vim.call('expand', '%:p').split('/')[-1]
+        filepath = self.vim.call('expand', '%:p')
         buf = self.vim.current.buffer
         offset = self.vim.call('line2byte', line) + \
             charpos2bytepos('utf-8', context['input'], column) - 1
 
-        completion = Completion(source_file=filename)
+        completion = Completion(source_file=filepath)
         result = completion.completion_at_offset(offset)
         return result
 
