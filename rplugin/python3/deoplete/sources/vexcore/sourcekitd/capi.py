@@ -106,7 +106,7 @@ class Object(object):
     def __repr__(self):
         ptr = conf.lib.sourcekitd_request_description_copy(self)
         s = string_at(ptr).decode('utf-8')
-        # conf.free(ptr)
+        conf.free(ptr)
         return s
 
 
@@ -131,7 +131,7 @@ class Response(object):
     def __repr__(self):
         ptr = conf.lib.sourcekitd_response_description_copy(self)
         s = string_at(ptr).decode('utf-8')
-        # conf.free(ptr)
+        conf.free(ptr)
         return s
 
 
