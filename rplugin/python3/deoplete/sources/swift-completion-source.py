@@ -44,33 +44,4 @@ class Source(Base):
         result = completion.completion_at_offset(offset)
         return result
 
-    def identifiers_from_result(self, result):
-        out = []
-
-        candidates = []
-        longest_desc_length = 0
-        longest_desc = ''
-        for complete in result:
-            candidates.append(complete)
-
-            desc_len = len(complete['descriptionKey'])
-
-            if desc_len > longest_desc_length:
-                longest_desc = complete['descriptionKey']
-                longest_desc_length = desc_len
-
-        for completion in candidates:
-            description = completion['descriptionKey']
-            _type = completion['typeName']
-            abbr = description + ' : ' + _type.rjust((len(description) - longest_desc_length) + 3)
-            info = _type
-
-            candidate = dict(word=description,
-                              abbr=abbr,
-                              dup=1
-                              )
-
-            out.append(candidate)
-
-        return out
 
