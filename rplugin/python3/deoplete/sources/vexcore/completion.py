@@ -1,5 +1,9 @@
 from .sourcekitd.capi import Config, UIdent
 from .sourcekitd.request import request_sync
+from .xcodebuild_output_parser import CompilerFlags
+import logging
+logger = logging.getLogger(__name__)
+debug, info, warn = (logger.debug, logger.info, logger.warn,)
 
 class Completion():
     request_key = "source.request.codecomplete"
@@ -7,6 +11,10 @@ class Completion():
     def __init__(self, text=None, source_file=None):
         self.source_file = source_file
         self.text = text
+        toolchain = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain"
+        self.xcodebuild_output = CompilerFlags(toolchain=toolchain)
+        self.xcodebuild_output.parse_input()
+        print(f"compiler args {self.xcodebuild_output.flags}")
 
     def completion_at_offset(self, byte_offset):
         req = { 
@@ -21,7 +29,7 @@ class Completion():
         else:
             raise RuntimeError("Must do completion on file or text")
         req['key.sourcefile'] = sourcefile
-        req['key.compilerargs'] = ["-c", sourcefile]
+        req['key.compilerargs'] = self.xcodebuild_output.flags
         resp = request_sync(req)
         py_obj =  resp.get_payload().to_python_object()
         results = py_obj['key.results']
