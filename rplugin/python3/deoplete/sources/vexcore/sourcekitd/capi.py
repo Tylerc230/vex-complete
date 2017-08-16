@@ -608,8 +608,8 @@ class Config(object):
         if name == 'Darwin':
             # The XPC service cannot run via the bindings due to permissions
             # issue.
-            # file = 'sourcekitd.framework/sourcekitd'
-            file = 'libsourcekitdInProc.dylib'
+            file = 'sourcekitd.framework/sourcekitd'
+            # file = 'libsourcekitdInProc.dylib'
         elif name == 'Windows':
             file = 'sourcekitd.dll'
         else:
@@ -634,6 +634,7 @@ class Config(object):
 
 # Config.set_library_path("vexcore/sourcekitd")
 Config.set_library_file("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/sourcekitd.framework/sourcekitd")
+# Config.set_library_file("/Users/tyler/tools/swift_build/build/Xcode-DebugAssert/swift-macosx-x86_64/Debug/lib/sourcekitd.framework/sourcekitd")
 conf = Config()
 conf.lib.sourcekitd_initialize()
 

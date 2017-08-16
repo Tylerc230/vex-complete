@@ -42,6 +42,7 @@ class Source(Base):
 
         completion = Completion(source_file=filepath)
         result = completion.completion_at_offset(offset)
+        self.debug(f"vex {result}")
         return result
 
 

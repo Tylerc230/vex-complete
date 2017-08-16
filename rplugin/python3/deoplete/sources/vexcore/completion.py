@@ -1,20 +1,18 @@
 from .sourcekitd.capi import Config, UIdent
 from .sourcekitd.request import request_sync
 from .xcodebuild_output_parser import CompilerFlags
-import logging
-logger = logging.getLogger(__name__)
-debug, info, warn = (logger.debug, logger.info, logger.warn,)
+from .non_frontend_flags import non_frontend_flags
+from deoplete.logger import LoggingMixin
 
-class Completion():
+class Completion(LoggingMixin):
     request_key = "source.request.codecomplete"
 
     def __init__(self, text=None, source_file=None):
         self.source_file = source_file
         self.text = text
-        toolchain = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain"
-        self.xcodebuild_output = CompilerFlags(toolchain=toolchain)
+        toolchain = "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain"
+        self.xcodebuild_output = CompilerFlags(toolchain=toolchain, excluded_flags = non_frontend_flags)
         self.xcodebuild_output.parse_input()
-        print(f"compiler args {self.xcodebuild_output.flags}")
 
     def completion_at_offset(self, byte_offset):
         req = { 
