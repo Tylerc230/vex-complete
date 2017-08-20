@@ -22,13 +22,12 @@ class Completion():
             self.logger.info("vex text based completion")
             self.logger.debug(f"vex text: {self.text}")
             req['key.sourcetext'] = self.text
+
+        if self.source_file == None:
             sourcefile = "46F57330-59A6-490C-A782-2E3C3C0DC5E0.swift"
-        elif not self.source_file == None:
-            self.logger.info("vex file based completion")
-            self.logger.debug(f"vex file {self.source_file}")
-            sourcefile = self.source_file
         else:
-            raise RuntimeError("Must do completion on file or text")
+            sourcefile = self.source_file
+
         req['key.sourcefile'] = sourcefile
         req['key.compilerargs'] = self.xcodebuild_output.flags
         self.logger.debug(f"vex request {req}")

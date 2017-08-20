@@ -40,7 +40,8 @@ class Source(Base):
         offset = self.vim.call('line2byte', line) + \
             charpos2bytepos('utf-8', context['input'], column) - 1
 
-        completion = Completion(self, source_file=filepath)
+        buf_contents = "\n".join(buf[:])
+        completion = Completion(self, text=buf_contents, source_file=filepath)
         result = completion.completion_at_offset(offset)
         self.debug(f"vex results {result}")
         return result
