@@ -21,6 +21,7 @@ class Source(Base):
         self.filetypes = ['swift']
         self.input_pattern = r'(?:\b[^\W\d]\w*|[\]\)])(?:\.(?:[^\W\d]\w*)?)*\(?'
         self.rank = 500
+        self.completion = Completion(self)
         
         self.temp_file_directory = "/tmp/vexcomplete/"
 
@@ -41,8 +42,7 @@ class Source(Base):
             charpos2bytepos('utf-8', context['input'], column) - 1
 
         buf_contents = "\n".join(buf[:])
-        completion = Completion(self, text=buf_contents, source_file=filepath)
-        result = completion.completion_at_offset(offset)
+        result = self.completion.completion_at_offset(offset, filepath, buf_contents)
         self.debug(f"vex results {result}")
         return result
 

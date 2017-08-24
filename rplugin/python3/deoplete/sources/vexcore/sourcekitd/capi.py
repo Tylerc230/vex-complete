@@ -36,6 +36,13 @@ callbacks = {}
 # Structures and Utility Classes
 
 
+conf = None
+def init_sourcekit(toolchain):
+    global conf
+    Config.set_library_file(toolchain + "/usr/lib/sourcekitd.framework/sourcekitd")
+    conf = Config()
+    conf.lib.sourcekitd_initialize()
+
 class CachedProperty(object):
     """Decorator that lazy-loads the value of a property.
 
@@ -630,13 +637,6 @@ class Config(object):
             raise LibsourcekitdError(msg)
 
         return library
-
-
-# Config.set_library_path("vexcore/sourcekitd")
-Config.set_library_file("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/sourcekitd.framework/sourcekitd")
-# Config.set_library_file("/Users/tyler/tools/swift_build/build/Xcode-DebugAssert/swift-macosx-x86_64/Debug/lib/sourcekitd.framework/sourcekitd")
-conf = Config()
-conf.lib.sourcekitd_initialize()
 
 __all__ = [
     'Config',

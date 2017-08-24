@@ -1,4 +1,5 @@
 import subprocess
+from .sourcekitd.capi import init_sourcekit
 from deoplete.logger import LoggingMixin
 
 class CompilerFlags():
@@ -15,6 +16,8 @@ class CompilerFlags():
         else:
             self.toolchain = toolchain
         self.logger.info(f"vex toolchain {self.toolchain}")
+        init_sourcekit(self.toolchain)
+
 
     def parse_input(self):
         self.flags = self._find_compile_flags()
