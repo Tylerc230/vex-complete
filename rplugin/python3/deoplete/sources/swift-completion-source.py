@@ -10,7 +10,8 @@ from deoplete.util import error
 
 path = os.path.dirname(__file__)
 sys.path.append(path)
-from  vexcore.completion import Completion
+from vexcore.completion import Completion
+from vexcore.project import Project
 
 class Source(Base):
     def __init__(self, vim):
@@ -21,12 +22,14 @@ class Source(Base):
         self.filetypes = ['swift']
         self.input_pattern = r'(?:\b[^\W\d]\w*|[\]\)])(?:\.(?:[^\W\d]\w*)?)*\(?'
         self.rank = 500
-        self.completion = Completion(self)
         
         self.temp_file_directory = "/tmp/vexcomplete/"
 
         if not os.path.exists(self.temp_file_directory):
             os.makedirs(self.temp_file_directory)
+
+        project = Project('vex.yaml')
+        self.completion = Completion(self, project)
 
     def get_complete_position(self, context):
         m = re.search(r'\w*$', context['input'])

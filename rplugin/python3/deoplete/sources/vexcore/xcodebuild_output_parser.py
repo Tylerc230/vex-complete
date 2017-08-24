@@ -2,9 +2,10 @@ import subprocess
 from .sourcekitd.capi import init_sourcekit
 from deoplete.logger import LoggingMixin
 
-class CompilerFlags():
-    def __init__(self, logger, toolchain=None, input=None, excluded_flags=None):
+class CompilerFlags(object):
+    def __init__(self, logger, project, toolchain=None, input=None, excluded_flags=None):
         self.logger = logger
+        self.project = project
         self.excluded_flags = excluded_flags
         if input == None:
             self.input = self._xcodebuild()
@@ -34,9 +35,21 @@ class CompilerFlags():
 
 
     def _xcodebuild(self):
-        return self._get_output(["xcodebuild", "clean", "build", "-dry-run", "-destination", "platform=iOS Simulator,name=iPhone 5s", "-scheme", "VimTesting"])
+        cmd = ["xcodebuild", "clean", "build", "-dry-run", "-destination", "platform=iOS Simulator,name=iPhone 5s"]
+        cmd.extend(self._project_flags())
+        return self._get_output(cmd)
+
+    def _project_flags(self):
+        flags = []
+        if not self.project.xcodeproj == None:
+            flags.extend(["-project", self.project.xcodeproj])
+        if not self.project.xcodescheme == None:
+            flags.extend(["-scheme", self.project.xcodescheme])
+        return flags
+
 
     def _get_output(self, cmd):
+        self.logger.debug(f"vex command {cmd}")
         try:
             output = subprocess.check_output(cmd)
             return output.decode("utf-8")

@@ -3,12 +3,12 @@ from .sourcekitd.request import request_sync
 from .xcodebuild_output_parser import CompilerFlags
 from .non_frontend_flags import non_frontend_flags
 
-class Completion():
+class Completion(object):
     request_key = "source.request.codecomplete"
 
-    def __init__(self, logger):
+    def __init__(self, logger, project):
         self.logger = logger
-        self.xcodebuild_output = CompilerFlags(self.logger, excluded_flags = non_frontend_flags)
+        self.xcodebuild_output = CompilerFlags(self.logger, project, excluded_flags = non_frontend_flags)
         self.xcodebuild_output.parse_input()
 
     def completion_at_offset(self, byte_offset, source_file, text):
