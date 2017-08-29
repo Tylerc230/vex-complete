@@ -28,14 +28,19 @@ class Source(Base):
         if not os.path.exists(self.temp_file_directory):
             os.makedirs(self.temp_file_directory)
 
-        project = Project('vex.yaml')
-        self.completion = Completion(self, project)
+        try:
+            project = Project('vex.yaml')
+            self.completion = Completion(self, project)
+        except:
+            self.completion = None
 
     def get_complete_position(self, context):
         m = re.search(r'\w*$', context['input'])
         return m.start() if m else -1
 
     def gather_candidates(self, context):
+        if self.completion == None:
+            return []
         line = self.vim.current.window.cursor[0]
         column = self.vim.current.window.cursor[1]
 
